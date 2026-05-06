@@ -1,0 +1,24 @@
+services:
+    test_app:
+      build: .
+      container_name: test_fitness_app
+      depends_on: 
+        - test_db
+        - test_redis
+      command: python -m pytest
+
+    test_db:
+      image: postgres:16
+      container_name: test_fitness_db
+      environment:
+        POSTGRES_USER: test
+        POSTGRES_PASSWORD: test123
+        POSTGRES_DB: testfitnessclub
+      ports:
+      - "5434:5432"
+    
+    test_redis:
+      image: redis:7
+      container_name: test_fitness_redis
+      ports:
+      - "6380:6379"

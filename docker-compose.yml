@@ -1,0 +1,40 @@
+
+services:
+    app:
+      build: .
+      container_name: fitness_app
+      ports:
+      - "8000:8000"
+      depends_on:
+      - db
+      - redis
+      volumes:
+      - .:/app
+      command:  >
+        uvicorn app.main:app
+        --host 0.0.0.0
+        --port 8000
+        --reload
+        --no-access-log
+      
+    
+    db:
+      image: postgres:16
+      container_name: fitness_db
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: fitnessclub
+      ports:
+        - "5432:5432"
+      volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    redis:
+      image: redis:7
+      container_name: fitness_redis
+      ports:
+        - "6379:6379"
+
+volumes:
+  postgres_data:
